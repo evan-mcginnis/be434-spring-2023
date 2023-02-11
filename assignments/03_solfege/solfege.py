@@ -52,7 +52,7 @@ if __name__ == "__main__":
                     "Ti": "A drink with jam and bread"}
 
     parser = argparse.ArgumentParser(
-        description='Assignment 3: Responses to the do-rm-mi sont',
+        description='Assignment 3: Responses to the do-rm-mi song',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('key', metavar='str', type=str, nargs='+', help="")
