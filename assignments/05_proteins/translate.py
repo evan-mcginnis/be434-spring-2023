@@ -7,7 +7,7 @@ Purpose: Assignment 5
 
 import argparse
 import sys
-import csv
+
 
 class Codons:
     def __init__(self, filename: str):
@@ -37,13 +37,14 @@ class Codons:
         for codon in codon_list:
             try:
                 translation += self._translations[codon]
-            except KeyError as err:
+            except KeyError:
                 translation += '-'
         return translation
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='Assignment 5: Translate a given DNA/RNA sequence to amino acids',
+        description='Assignment 5: Translate DNA/RNA sequence to amino acids',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('-c', '--codons', required=True, type=str)
@@ -61,5 +62,3 @@ if __name__ == "__main__":
         f.write(c.translate(arguments.sequence.upper()))
 
     print(f'Output written to "{arguments.output}".')
-
-
