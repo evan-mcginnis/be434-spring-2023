@@ -12,7 +12,8 @@ KEYWORD_COLUMN = "column"
 
 # A note to the grader:
 # The test is probably incorrect for the unknown file, as is it does not
-# supply a required argument, the value.  If you check to see if the file
+# supply a required argument, the value, so there are two things wrong, not just one
+# If you check to see if the file
 # exists before you check to see if you have the arguments expected, this
 # will work, I suppose. But normally you check to see if you have all the
 # parameters you expect and then you check to see if things are valid.
@@ -98,7 +99,7 @@ if __name__ == "__main__":
 
     parser.add_argument('-f', '--file',
                         required=True,
-                        type=str,
+                        type=argparse.FileType('r'),
                         help="Input CSV")
     parser.add_argument('-v', '--value',
                         required=True,
