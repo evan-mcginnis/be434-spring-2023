@@ -131,7 +131,12 @@ if __name__ == "__main__":
     # Suppressing the expansion of the tab on the command line seems to be
     # very bash version and setting dependant, so im my case, the parameter
     # comes across as containing the $, when that was probably not the
-    # intent -- thus the hack coded here.
+    # intent -- thus the hack coded here. The program works just fine
+    # without this when you execute this directly from the cpmmand line, but
+    # not when pytest executes the program.  That probably executes a
+    # subshell that does not have a setting required to handle the $
+    # notation.
+    
     #print("Delimiter: [{}]".format(arguments.delimiter))
     if arguments.delimiter == "$\t":
         #print("Detected tab")
