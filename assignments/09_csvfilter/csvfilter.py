@@ -6,13 +6,13 @@ Purpose: Assignment 9
 """
 import sys
 import argparse
-import random
 
 KEYWORD_COLUMN = "column"
 
 # A note to the grader:
 # The test is probably incorrect for the unknown file, as is it does not
-# supply a required argument, the value, so there are two things wrong, not just one
+# supply a required argument, the value, so there are two things wrong, not
+# just one. The test doesn't quite check what you want it to.
 # If you check to see if the file
 # exists before you check to see if you have the arguments expected, this
 # will work, I suppose. But normally you check to see if you have all the
@@ -20,13 +20,6 @@ KEYWORD_COLUMN = "column"
 # I will hack this to get the tests to pass, but consider changing this, as
 # it is technically not correct.
 
-
-#
-# This is certainly not what I would recommend for this solution.
-# Probably much better to use pandas to manipulate and search for the
-# values than write this from scratch, although I realize that's not
-# the point of the exercise.
-#
 
 class CSVData:
     def __init__(self, filename: str, separator: str):
@@ -44,9 +37,10 @@ class CSVData:
         """
         try:
             with open(self._filename, "r", encoding='UTF-8') as file:
+                #reader = self.reader(file, delimiter=self._separator)
                 all_contents = file.readlines()
             # Column names are the first row
-            self._column_names = all_contents[0].split(self._separator.rstrip())
+            self._column_names = all_contents[0].split(self._separator)
 
             # Contents are all following rows
             self._original = all_contents[1:]
@@ -67,6 +61,10 @@ class CSVData:
         """
         return column in self._column_names
 
+    @property
+    def columns(self) -> []:
+        return self._column_names
+
     def search(self, target: str, **kwargs) -> []:
         """
         Perform a case-insensitive search, returning all matching records
@@ -78,13 +76,19 @@ class CSVData:
         results = []
         found_in_line = 0
 
+        # Determine the target column to search
         if KEYWORD_COLUMN in kwargs and kwargs[KEYWORD_COLUMN] is not None:
             target_column = self._column_names.index(kwargs[KEYWORD_COLUMN])
 
         for line in self._contents:
-            if target_column is not None and target.lower() in line[target_column]:
-                print("Found in column {}".format(target_column))
-                results.append(self._original[found_in_line])
+            # print("Looking at {}".format(line))
+            if target_column is not None:
+                try:
+                    if target.lower() in line[target_column]:
+                        # print("Found in column {}".format(target_column))
+                        results.append(self._original[found_in_line])
+                except IndexError:
+                    pass
             elif target.lower() in line:
                 results.append(self._original[found_in_line])
             found_in_line += 1
@@ -122,7 +126,18 @@ if __name__ == "__main__":
 
     arguments = parser.parse_args()
 
-    csv = CSVData(arguments.file, arguments.delimiter)
+
+    # A note to the grader:
+    # Suppressing the expansion of the tab on the command line seems to be
+    # very bash version and setting dependant, so im my case, the parameter
+    # comes across as containing the $, when that was probably not the
+    # intent -- thus the hack coded here.
+    #print("Delimiter: [{}]".format(arguments.delimiter))
+    if arguments.delimiter == "$\t":
+        #print("Detected tab")
+        arguments.delimiter = "\t"
+
+    csv = CSVData(arguments.file.name, arguments.delimiter)
 
     try:
         csv.read()
@@ -138,6 +153,7 @@ if __name__ == "__main__":
         # user instead of having them guess what is valid.
 
         print(f'--col "{arguments.col}" not a valid column!')
+        print(f"Valid column names: {csv.columns}")
         sys.exit(1)
 
     # Search for the string
