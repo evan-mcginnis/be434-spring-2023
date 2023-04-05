@@ -10,7 +10,15 @@ import argparse
 
 
 class Common:
+    """
+    Common strings in two files
+    """
     def __init__(self, file1: str, file2: str):
+        """
+        Common strings in two files
+        :param file1: A text file
+        :param file2: A text file
+        """
         self._left = file1
         self._right = file2
         self._left_contents = []
@@ -19,6 +27,9 @@ class Common:
         self._right_set = set([])
 
     def read(self):
+        """
+        Read the files
+        """
         with open(self._left, "r", encoding="UTF-8") as file:
             lines = [x.split() for x in file.readlines()]
             for line in lines:
@@ -31,6 +42,10 @@ class Common:
             self._right_set = set(self._right_contents)
 
     def in_common(self) -> []:
+        """
+        Find the strings the two files have in common
+        :return: Sorted list of intersection
+        """
         return sorted(self._left_set.intersection(self._right_set))
 
 
@@ -43,7 +58,6 @@ if __name__ == "__main__":
 
     parser.add_argument('-o', '--outfile',
                         required=False,
-                        default="out.csv",
                         type=str,
                         help="Output file")
 
@@ -55,12 +69,17 @@ if __name__ == "__main__":
             print(f"No such file or directory: '{_file}'")
             sys.exit(2)
 
+    if arguments.outfile is not None:
+        outfile = open(arguments.outfile, "w", encoding="UTF-8")
+    else:
+        outfile = sys.stdout
+
     common = Common(arguments.file[0], arguments.file[1])
     common.read()
 
     words_in_common = common.in_common()
 
     for word in words_in_common:
-        print(f"{word}")
+        outfile.write(f"{word}\n")
 
     sys.exit(0)
