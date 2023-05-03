@@ -105,7 +105,7 @@ class Text:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description='Assignment Caesar: Encode',
+        description='Assignment Substitution: Encode/Decode',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument('input', metavar='FILE', type=str)
